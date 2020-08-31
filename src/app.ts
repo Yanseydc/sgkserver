@@ -1,14 +1,21 @@
 import { Server } from '@hapi/hapi';
-import { routes } from './routes/users.routes';
+import Routes from './routes/users.routes';
 
-export const init = async () => {
-    const server: Server = new Server({
-        port: 3000, 
-        host: 'localhost'
-    });
-    
-    routes(server);
+class App {           
 
-    await server.start();
-    console.log('server running on %s', server.info.uri);
+    public init = async () => {
+        const config: object = { port: 3000, host: 'localhost'}; 
+        const server: Server = new Server(config);
+
+        new Routes(server);
+
+        try {
+            await server.start();
+            console.log('server running on %s', server.info.uri);
+        } catch(err) {
+            console.log('error starting server', err);
+        }
+    }
 }
+
+export default new App();

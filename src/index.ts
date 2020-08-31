@@ -1,4 +1,6 @@
-import { init } from './app';
+import App from './app';
 import './database';
 
-init();
+
+
+App.init();

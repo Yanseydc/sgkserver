@@ -1,37 +1,45 @@
-import { Server } from '@hapi/hapi'
-import { createUser } from './../controllers/users.controller'
+import { Server } from '@hapi/hapi';
+import Joi from '@hapi/joi'; 
+import UsersController from './../controllers/users.controller';
 
-export const routes = (server: Server) => {
+export default class Routes {    
 
-    server.route({
-        method: 'POST',
-        path: '/users',
-        handler: createUser
-    })
+    private usersController: UsersController = new UsersController();
 
-    server.route({
-        method: 'GET',
-        path: '/users',
-        handler: ()=>{}
-    })
+    constructor(server: Server) {        
+        this.configureRoutes(server);
+    }
 
-    server.route({
-        method: 'GET',
-        path: '/users/{id}',
-        handler: ()=>{}
-    })
+    private configureRoutes = (server: Server) => { 
+        server.route({
+            method: 'POST',
+            path: '/users',
+            handler: this.usersController.createUser
+        });
 
-    server.route({
-        method: 'PUT',
-        path: '/users/{id}',
-        handler: ()=>{}
-    })
+        server.route({
+            method: 'GET',
+            path: '/users',
+            handler: this.usersController.getUsers
+        });
+    
+        server.route({
+            method: 'GET',
+            path: '/users/{id}',
+            handler: this.usersController.getUser
+        });
 
-    server.route({
-        method: 'DELETE',
-        path: '/users/{id}',
-        handler: ()=>{}
-    })
-
+        server.route({
+            method: 'PUT',
+            path: '/users/{id}',
+            handler: this.usersController.updateUser
+        });
+    
+        server.route({
+            method: 'DELETE',
+            path: '/users/{id}',
+            handler: this.usersController.deleteUser
+        });
+    }
 
 }
